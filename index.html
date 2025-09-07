@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uplift - Pay-to-Vote Compassion Marketplace</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .container { max-width: 800px; padding: 40px 20px; }
+        h1 { font-size: 3rem; margin-bottom: 1rem; font-weight: 700; }
+        .subtitle { font-size: 1.4rem; margin-bottom: 3rem; opacity: 0.9; }
+        .demo-btn { 
+            background: #27ae60; 
+            color: white; 
+            padding: 20px 40px; 
+            border: none; 
+            border-radius: 50px; 
+            font-size: 1.2rem; 
+            cursor: pointer; 
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .demo-btn:hover { 
+            background: #219a52; 
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin: 50px 0;
+        }
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 30px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .feature h3 { font-size: 1.3rem; margin-bottom: 15px; }
+        .links { margin-top: 50px; }
+        .links a { color: white; text-decoration: none; margin: 0 20px; opacity: 0.8; }
+        .links a:hover { opacity: 1; text-decoration: underline; }
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .subtitle { font-size: 1.1rem; }
+            .demo-btn { padding: 15px 30px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤗 Uplift</h1>
+        <p class="subtitle">The first pay-to-vote compassion marketplace on Algorand blockchain</p>
+        
+        <div style="margin: 40px 0;">
+            <a href="demo/" class="demo-btn">🚀 Try Live Demo</a>
+            <a href="https://github.com/gulkily/uplift" class="demo-btn" style="background: #3498db;">📋 View Code</a>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>💰 Pay-to-Vote</h3>
+                <p>Community pays $2-5 ALGO to rank responses. Economic barriers prevent gaming while rewarding quality.</p>
+            </div>
+            <div class="feature">
+                <h3>🎁 Viral Growth</h3>
+                <p>Gift voting credits to friends in crisis. "Here's $10 to get wisdom for your divorce situation."</p>
+            </div>
+            <div class="feature">
+                <h3>🏆 Creator Economy</h3>
+                <p>Response creators earn 60% of vote revenue. $15M+ annual earning potential for compassionate wisdom.</p>
+            </div>
+            <div class="feature">
+                <h3>🔗 Algorand Powered</h3>
+                <p>Smart contracts ensure instant, transparent reward distribution with minimal fees.</p>
+            </div>
+        </div>
+        
+        <div style="margin: 40px 0;">
+            <h2 style="margin-bottom: 20px;">How It Works</h2>
+            <p style="font-size: 1.1rem; line-height: 1.6; opacity: 0.9;">
+                1. Someone posts a life crisis → 2. Community submits compassionate responses → 
+                3. People pay to vote on empathy, wisdom, clarity, impact → 4. Winners earn ALGO rewards → 
+                5. Quality wisdom spreads through gifted credits
+            </p>
+        </div>
+        
+        <div class="links">
+            <a href="README.md">📖 Documentation</a>
+            <a href="DEPLOYMENT.md">🚀 Deployment Guide</a>  
+            <a href="contracts/">💻 Smart Contracts</a>
+            <a href="platform_specification.md">📊 Business Model</a>
+        </div>
+        
+        <div style="margin-top: 50px; opacity: 0.7; font-size: 0.9rem;">
+            <p>Built with ❤️ for a more compassionate world</p>
+            <p>Transforming human wisdom into a valuable, rankable commodity</p>
+        </div>
+    </div>
+</body>
+</html>
