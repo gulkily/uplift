@@ -1,0 +1,302 @@
+#pragma version 8
+
+// Uplift Voting Smart Contract
+// Handles pay-to-vote mechanics, dynamic pricing, and stake-based validation
+
+txn ApplicationID
+int 0
+==
+bnz main_creation
+
+// Route application calls
+txna ApplicationArgs 0
+byte "vote"
+==
+bnz handle_vote
+
+txna ApplicationArgs 0
+byte "get_results"
+==
+bnz handle_get_results
+
+txna ApplicationArgs 0
+byte "calculate_rewards"
+==
+bnz handle_calculate_rewards
+
+txna ApplicationArgs 0
+byte "get_price"
+==
+bnz handle_get_price
+
+// Unknown method
+err
+
+handle_vote:
+    // Validate payment transaction
+    txn GroupIndex
+    int 1
+    -
+    store 0 // Store payment txn index
+    
+    // Ensure payment is included
+    load 0
+    gtxns TypeEnum
+    int pay
+    ==
+    assert
+    
+    // Get vote price for this response
+    txna ApplicationArgs 1 // response_id
+    callsub get_vote_price
+    store 1 // Store required price
+    
+    // Validate payment amount
+    load 0
+    gtxns Amount
+    load 1
+    >=
+    assert
+    
+    // Store vote data
+    txna ApplicationArgs 1 // response_id
+    txna ApplicationArgs 2 // empathy_score
+    txna ApplicationArgs 3 // wisdom_score  
+    txna ApplicationArgs 4 // clarity_score
+    txna ApplicationArgs 5 // impact_score
+    callsub store_vote
+    
+    int 1
+    return
+
+handle_get_results:
+    txna ApplicationArgs 1 // response_id
+    callsub get_response_results
+    return
+
+handle_calculate_rewards:
+    txna ApplicationArgs 1 // response_id
+    callsub calculate_and_distribute_rewards
+    return
+
+handle_get_price:
+    txna ApplicationArgs 1 // response_id
+    callsub get_vote_price
+    store 2
+    load 2
+    itob
+    log
+    int 1
+    return
+
+// Subroutine: Calculate dynamic vote price
+get_vote_price:
+    store 10 // response_id
+    
+    // Base price: 2.5 ALGO (2,500,000 microALGO)
+    int 2500000
+    store 11
+    
+    // Get current vote count for demand multiplier
+    load 10
+    byte "vote_count_"
+    concat
+    app_global_get
+    store 12 // vote_count
+    
+    // Calculate demand multiplier (1.0 + vote_count/50)
+    load 12
+    int 50
+    /
+    int 100
+    +
+    store 13 // demand_multiplier (as percentage)
+    
+    // Apply demand multiplier
+    load 11
+    load 13
+    *
+    int 100
+    /
+    store 14 // adjusted_price
+    
+    // Ensure price bounds (1.5 - 4.5 ALGO)
+    load 14
+    int 1500000 // min price
+    >=
+    load 14
+    int 4500000 // max price
+    <=
+    &&
+    bz use_base_price
+    
+    load 14
+    retsub
+    
+    use_base_price:
+    load 11
+    retsub
+
+// Subroutine: Store vote data
+store_vote:
+    store 20 // impact_score
+    store 21 // clarity_score
+    store 22 // wisdom_score
+    store 23 // empathy_score
+    store 24 // response_id
+    
+    // Increment vote count
+    load 24
+    byte "vote_count_"
+    concat
+    dup
+    app_global_get
+    int 1
+    +
+    app_global_put
+    
+    // Store individual scores (simplified - would need more complex storage)
+    load 24
+    byte "empathy_total_"
+    concat
+    dup
+    app_global_get
+    load 23
+    +
+    app_global_put
+    
+    load 24
+    byte "wisdom_total_"
+    concat
+    dup
+    app_global_get
+    load 22
+    +
+    app_global_put
+    
+    load 24
+    byte "clarity_total_"
+    concat
+    dup
+    app_global_get
+    load 21
+    +
+    app_global_put
+    
+    load 24
+    byte "impact_total_"
+    concat
+    dup
+    app_global_get
+    load 20
+    +
+    app_global_put
+    
+    // Store voter address for consensus tracking
+    load 24
+    byte "voter_"
+    concat
+    txn Sender
+    concat
+    byte "true"
+    app_global_put
+    
+    retsub
+
+// Subroutine: Get response results
+get_response_results:
+    store 30 // response_id
+    
+    // Get vote count
+    load 30
+    byte "vote_count_"
+    concat
+    app_global_get
+    store 31
+    
+    // Calculate averages
+    load 30
+    byte "empathy_total_"
+    concat
+    app_global_get
+    load 31
+    /
+    store 32 // avg_empathy
+    
+    load 30
+    byte "wisdom_total_"
+    concat
+    app_global_get
+    load 31
+    /
+    store 33 // avg_wisdom
+    
+    load 30
+    byte "clarity_total_"
+    concat
+    app_global_get
+    load 31
+    /
+    store 34 // avg_clarity
+    
+    load 30
+    byte "impact_total_"
+    concat
+    app_global_get
+    load 31
+    /
+    store 35 // avg_impact
+    
+    // Log results
+    load 32
+    itob
+    log
+    load 33
+    itob
+    log
+    load 34
+    itob
+    log
+    load 35
+    itob
+    log
+    
+    int 1
+    retsub
+
+// Subroutine: Calculate and distribute rewards
+calculate_and_distribute_rewards:
+    store 40 // response_id
+    
+    // Get total staked amount for this response
+    load 40
+    byte "total_staked_"
+    concat
+    app_global_get
+    store 41
+    
+    // Calculate creator reward (60% of total staked)
+    load 41
+    int 60
+    *
+    int 100
+    /
+    store 42 // creator_reward
+    
+    // Get response creator address
+    load 40
+    byte "creator_"
+    concat
+    app_global_get
+    store 43 // creator_address
+    
+    // Transfer reward to creator (simplified - would use inner transactions)
+    // This would require more complex implementation in production
+    
+    int 1
+    retsub
+
+main_creation:
+    // App creation logic
+    int 1
+    return
