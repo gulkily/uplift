@@ -5,7 +5,7 @@ const ALGOD_ADDRESS = 'https://testnet-api.algonode.cloud';
 const ALGOD_TOKEN = '';
 
 let algodClient;
-let votingMode = 'demo'; // 'demo' or 'testnet'
+let votingMode = 'testnet'; // 'demo' or 'testnet'
 
 // Initialize Algorand client if window.AlgoSDK is available
 if (typeof window.AlgoSDK !== 'undefined') {
@@ -453,7 +453,7 @@ function showVoteResultModal(scores, stakeAmount, returnAmount, consensusAlignme
                 ${isTestNet ? 
                     `🔗 <strong>TestNet Transaction:</strong><br>
                     <code style="font-size: 13px; color: #8e8e93;">${txId || 'Processing...'}</code><br>
-                    <a href="https://lora.algokit.io/testnet/application/${UPLIFT_APP_ID}" target="_blank" style="color: white; text-decoration: underline;">View on Explorer</a>` :
+                    <a href="https://lora.algokit.io/testnet/application/${UPLIFT_APP_ID}" target="_blank" style="color: #007aff; text-decoration: underline;">View on Explorer</a>` :
                     `🔗 <strong>Transaction Hash:</strong><br>
                     <code style="font-size: 13px; color: #8e8e93;">0x4a7b...c9f2</code><br>
                     <small>(Simulated - would show real tx hash in production)</small>`

@@ -558,11 +558,11 @@
                 <div style="display: flex; gap: 8px; align-items: center;">
                     <span style="font-size: 14px; color: #8e8e93;">Mode:</span>
                     <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                        <input type="radio" name="voting-mode" value="demo" checked style="margin: 0;"> 
+                        <input type="radio" name="voting-mode" value="demo" style="margin: 0;"> 
                         <span style="font-size: 14px;">Demo</span>
                     </label>
                     <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                        <input type="radio" name="voting-mode" value="testnet" style="margin: 0;"> 
+                        <input type="radio" name="voting-mode" value="testnet" checked style="margin: 0;"> 
                         <span style="font-size: 14px;">🚀 Real TestNet</span>
                     </label>
                 </div>
@@ -658,7 +658,7 @@
             });
             
             // Set initial mode
-            setVotingMode('demo');
+            setVotingMode('testnet');
         });
     </script>
 </body>
