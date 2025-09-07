@@ -45,6 +45,76 @@ const demoData = {
             avgScores: { empathy: 9.5, wisdom: 8.9, clarity: 9.0, impact: 8.8 },
             earnings: 65.2,
             rank: 4
+        },
+        {
+            id: 105,
+            creator: "Anonymous",
+            text: "The answer within already. You don't need anyone to give you answer.",
+            votes: 26,
+            totalStaked: 95,
+            avgScores: { empathy: 8.1, wisdom: 9.6, clarity: 8.6, impact: 8.9 },
+            earnings: 45.6,
+            rank: 5
+        },
+        {
+            id: 106,
+            creator: "Anonymous",
+            text: "May not always understand why things are turning out the way they are right now, but it will make sense later.",
+            votes: 48,
+            totalStaked: 92,
+            avgScores: { empathy: 8.5, wisdom: 9.4, clarity: 9.4, impact: 9.9 },
+            earnings: 52.8,
+            rank: 6
+        },
+        {
+            id: 107,
+            creator: "Anonymous",
+            text: "This too shall pass. After a low moment, things will get better. Keep going.",
+            votes: 49,
+            totalStaked: 87,
+            avgScores: { empathy: 8.0, wisdom: 9.3, clarity: 8.1, impact: 9.2 },
+            earnings: 56.3,
+            rank: 7
+        },
+        {
+            id: 108,
+            creator: "Anonymous",
+            text: "God.",
+            votes: 36,
+            totalStaked: 90,
+            avgScores: { empathy: 8.0, wisdom: 9.6, clarity: 8.2, impact: 8.1 },
+            earnings: 44.2,
+            rank: 8
+        },
+        {
+            id: 109,
+            creator: "Anonymous",
+            text: "You're gonna be fine.",
+            votes: 43,
+            totalStaked: 119,
+            avgScores: { empathy: 8.8, wisdom: 9.9, clarity: 9.7, impact: 8.9 },
+            earnings: 53.1,
+            rank: 9
+        },
+        {
+            id: 110,
+            creator: "Anonymous",
+            text: "You have a great team with you.",
+            votes: 24,
+            totalStaked: 90,
+            avgScores: { empathy: 8.4, wisdom: 8.2, clarity: 9.7, impact: 9.1 },
+            earnings: 46.0,
+            rank: 10
+        },
+        {
+            id: 111,
+            creator: "Anonymous",
+            text: "You are authentic.",
+            votes: 46,
+            totalStaked: 109,
+            avgScores: { empathy: 8.4, wisdom: 9.9, clarity: 8.9, impact: 8.6 },
+            earnings: 66.1,
+            rank: 11
         }
     ],
     votingStats: {
