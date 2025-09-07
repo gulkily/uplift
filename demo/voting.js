@@ -183,10 +183,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 <a href="testnet.html" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
                     🔗 TestNet Demo
                 </a>
-                <a href="https://testnet.algoexplorer.io/address/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
+                <a href="https://lora.algokit.io/testnet/account/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
                     🔍 View Explorer
                 </a>
-                <a href="https://testnet.algoexplorer.io/address/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4/transactions" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
+                <a href="https://lora.algokit.io/testnet/account/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4/transactions" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
                     📋 Transactions
                 </a>
             </div>
