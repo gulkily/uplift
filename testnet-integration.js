@@ -14,7 +14,10 @@ class UpliftTestnetIntegration {
             server: 'https://testnet-api.algonode.cloud',
             port: 443,
             token: '',
-            demoAddress: 'ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4'
+            demoAddress: 'ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4',
+            // REAL DEPLOYED CONTRACT INFO
+            realAppId: 745516459,
+            realContractAddress: 'KE436S7PNTF7FDWUNXPCLBINMWXFHS2PZ4DQEYJWRD6HCPZ6POQ2TEUEJ4'
         };
         
         this.init();
@@ -156,40 +159,27 @@ class UpliftTestnetIntegration {
         }
         
         try {
-            this.log('🚀 Deploying smart contract...');
+            this.log('✅ Using REAL deployed contract!');
             
-            // Get suggested parameters
-            const suggestedParams = await this.algodClient.getTransactionParams().do();
+            // Use the actual deployed contract
+            this.appId = this.testnetConfig.realAppId;
+            this.contractAddress = this.testnetConfig.realContractAddress;
             
-            // Read compiled contract (in production, this would be the actual compiled TEAL)
-            const approvalProgram = new Uint8Array([
-                // This would be the compiled TEAL bytecode
-                // For demo, we'll simulate a successful deployment
-            ]);
-            
-            const clearProgram = new Uint8Array([
-                // Clear state program bytecode
-            ]);
-            
-            // For demo purposes, simulate contract deployment
-            this.appId = Math.floor(Math.random() * 1000000) + 100000;
-            this.contractAddress = algosdk.getApplicationAddress(this.appId);
-            
-            this.log('✅ Contract deployed successfully!');
             this.log('📋 Application ID: ' + this.appId);
             this.log('🏠 Contract Address: ' + this.contractAddress);
+            this.log('🔍 View on explorer: https://lora.algokit.io/testnet/application/' + this.appId);
             
             // Update UI
             document.getElementById('contract-app-id').textContent = this.appId;
             document.getElementById('contract-address').textContent = this.contractAddress;
-            document.getElementById('contract-status').textContent = 'Deployed';
+            document.getElementById('contract-status').textContent = 'Real Contract Deployed ✅';
             document.getElementById('fund-contract').classList.remove('hidden');
             
-            this.showInfo('Smart contract deployed successfully! App ID: ' + this.appId);
+            this.showInfo('Connected to REAL smart contract! App ID: ' + this.appId);
             
         } catch (error) {
-            this.log('❌ Error deploying contract: ' + error.message);
-            this.showError('Failed to deploy contract: ' + error.message);
+            this.log('❌ Error connecting to contract: ' + error.message);
+            this.showError('Failed to connect to contract: ' + error.message);
         }
     }
     
