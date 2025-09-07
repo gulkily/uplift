@@ -142,8 +142,8 @@ function submitVote() {
         demoData.votingStats.totalStaked += currentVotePrice;
         demoData.votingStats.participatingVoters += 1;
         
-        // Show transaction simulation
-        alert(`✅ Vote Submitted Successfully!\n\n📊 Your Vote:\nEmpathy: ${scores.empathy}/10\nWisdom: ${scores.wisdom}/10\nClarity: ${scores.clarity}/10\nImpact: ${scores.impact}/10\n\n💰 Financial Details:\nStaked: ${currentVotePrice.toFixed(2)} ALGO\nExpected return: ${stakeReturn.toFixed(2)} ALGO\n${consensusAlignment ? '🎉 +25% consensus bonus!' : '⚠️ -25% outlier penalty'}\n\n🎁 Creator Impact:\n${response.creator} will earn ${(currentVotePrice * 0.6).toFixed(2)} ALGO from your vote!\n\n🔗 Transaction: View on Algorand Explorer\n(Simulated - would show real tx hash in production)`);
+        // Show transaction simulation with custom modal
+        showVoteResultModal(scores, currentVotePrice, stakeReturn, consensusAlignment, response.creator);
         
         closeVoting();
         displayResponses(); // Refresh to show updated stats
@@ -164,7 +164,7 @@ function closeVoting() {
 }
 
 function simulateGiftCredits() {
-    alert(`🎁 Gifted Credits Demo\n\nScenario: Your friend Sarah is going through a divorce\n\nYou send: "Hey Sarah, I found this platform where people compete to give the most compassionate advice. Here's $15 of voting credits to help you get some wisdom during this tough time. ❤️"\n\n💸 Credits Gifted: 15 ALGO worth of voting credits\n🔄 Referral Bonus: You'll earn 20% back (3 ALGO) when Sarah votes\n📈 Viral Growth: Sarah discovers quality support and invites her sister\n\n🌟 This is how Uplift spreads compassion through personal networks!`);
+    showGiftCreditsModal();
 }
 
 // Initialize demo
@@ -224,3 +224,141 @@ document.addEventListener('DOMContentLoaded', function() {
     `;
     container.appendChild(instructions);
 });
+
+// Modal Functions
+function showModal(title, subtitle, content, actions) {
+    const overlay = document.getElementById('modal-overlay');
+    const modal = document.getElementById('modal');
+    const modalTitle = document.getElementById('modal-title');
+    const modalSubtitle = document.getElementById('modal-subtitle');
+    const modalContent = document.getElementById('modal-content');
+    const modalActions = document.getElementById('modal-actions');
+    
+    modalTitle.textContent = title;
+    modalSubtitle.textContent = subtitle || '';
+    modalContent.innerHTML = content;
+    modalActions.innerHTML = actions || '<button class="modal-button" onclick="closeModal()">OK</button>';
+    
+    overlay.classList.add('show');
+    
+    // Close modal when clicking overlay
+    overlay.onclick = function(e) {
+        if (e.target === overlay) {
+            closeModal();
+        }
+    };
+}
+
+function closeModal() {
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.remove('show');
+}
+
+function showVoteResultModal(scores, stakeAmount, returnAmount, consensusAlignment, creatorName) {
+    const title = '✅ Vote Submitted Successfully!';
+    const subtitle = 'Your vote has been recorded on the blockchain';
+    
+    const content = `
+        <div class="modal-section">
+            <div class="modal-section-title">📊 Your Vote Scores</div>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-label">Empathy</div>
+                    <div class="modal-stat-value">${scores.empathy}/10</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-label">Wisdom</div>
+                    <div class="modal-stat-value">${scores.wisdom}/10</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-label">Clarity</div>
+                    <div class="modal-stat-value">${scores.clarity}/10</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-label">Impact</div>
+                    <div class="modal-stat-value">${scores.impact}/10</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal-section">
+            <div class="modal-section-title">💰 Financial Summary</div>
+            <div class="modal-section-content">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Amount Staked:</span>
+                    <span style="font-weight: 600;">${stakeAmount.toFixed(2)} ALGO</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span>Expected Return:</span>
+                    <span style="font-weight: 600;">${returnAmount.toFixed(2)} ALGO</span>
+                </div>
+                ${consensusAlignment ? 
+                    '<div class="modal-highlight"><div class="modal-highlight-text">🎉 +25% consensus bonus earned!</div></div>' : 
+                    '<div class="modal-highlight"><div class="modal-highlight-text">⚠️ -25% outlier penalty applied</div></div>'
+                }
+            </div>
+        </div>
+        
+        <div class="modal-section">
+            <div class="modal-section-title">🎁 Creator Impact</div>
+            <div class="modal-section-content">
+                ${creatorName} will earn <strong>${(stakeAmount * 0.6).toFixed(2)} ALGO</strong> from your vote!
+            </div>
+        </div>
+        
+        <div class="modal-highlight">
+            <div class="modal-highlight-text">
+                🔗 <strong>Transaction Hash:</strong><br>
+                <code style="font-size: 13px; color: #8e8e93;">0x4a7b...c9f2</code><br>
+                <small>(Simulated - would show real tx hash in production)</small>
+            </div>
+        </div>
+    `;
+    
+    showModal(title, subtitle, content);
+}
+
+function showGiftCreditsModal() {
+    const title = '🎁 Gifted Credits Demo';
+    const subtitle = 'Experience viral growth through compassion';
+    
+    const content = `
+        <div class="modal-section">
+            <div class="modal-section-title">💭 Scenario</div>
+            <div class="modal-section-content">
+                Your friend Sarah is going through a divorce and needs support.
+            </div>
+        </div>
+        
+        <div class="modal-highlight">
+            <div class="modal-highlight-text">
+                "Hey Sarah, I found this platform where people compete to give the most compassionate advice. Here's $15 of voting credits to help you get some wisdom during this tough time. ❤️"
+            </div>
+        </div>
+        
+        <div class="modal-section">
+            <div class="modal-section-title">📈 Impact Chain</div>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-label">Credits Gifted</div>
+                    <div class="modal-stat-value">15 ALGO</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-label">Your Bonus</div>
+                    <div class="modal-stat-value">3 ALGO</div>
+                </div>
+            </div>
+            <div class="modal-section-content" style="margin-top: 12px;">
+                <strong>Viral Growth:</strong> Sarah discovers quality support and invites her sister, creating a compassion network.
+            </div>
+        </div>
+        
+        <div class="modal-highlight">
+            <div class="modal-highlight-text">
+                🌟 This is how Uplift spreads compassion through personal networks!
+            </div>
+        </div>
+    `;
+    
+    showModal(title, subtitle, content);
+}

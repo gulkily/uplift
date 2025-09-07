@@ -289,6 +289,170 @@
             background: #636366;
         }
         
+        /* iOS-style Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        .modal {
+            background: white;
+            border-radius: 16px;
+            max-width: 320px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                transform: scale(0.9) translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-header {
+            padding: 20px 20px 16px 20px;
+            text-align: center;
+            border-bottom: 0.5px solid #e5e5e7;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 4px;
+        }
+        
+        .modal-subtitle {
+            font-size: 15px;
+            color: #8e8e93;
+        }
+        
+        .modal-content {
+            padding: 20px;
+        }
+        
+        .modal-section {
+            margin-bottom: 20px;
+        }
+        
+        .modal-section:last-child {
+            margin-bottom: 0;
+        }
+        
+        .modal-section-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #1c1c1e;
+            margin-bottom: 8px;
+        }
+        
+        .modal-section-content {
+            font-size: 15px;
+            line-height: 1.4;
+            color: #3c3c43;
+        }
+        
+        .modal-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        
+        .modal-stat {
+            background: #f2f2f7;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            border: 0.5px solid #e5e5e7;
+        }
+        
+        .modal-stat-label {
+            font-size: 13px;
+            color: #8e8e93;
+            margin-bottom: 4px;
+        }
+        
+        .modal-stat-value {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1c1c1e;
+        }
+        
+        .modal-highlight {
+            background: #f2f2f7;
+            padding: 16px;
+            border-radius: 12px;
+            border: 0.5px solid #e5e5e7;
+            margin: 16px 0;
+        }
+        
+        .modal-highlight-text {
+            font-size: 15px;
+            line-height: 1.4;
+            color: #3c3c43;
+            text-align: center;
+        }
+        
+        .modal-actions {
+            padding: 16px 20px 20px 20px;
+            border-top: 0.5px solid #e5e5e7;
+        }
+        
+        .modal-button {
+            background: #007aff;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 17px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .modal-button:active {
+            background: #0056cc;
+        }
+        
+        .modal-button-secondary {
+            background: #f2f2f7;
+            color: #007aff;
+            border: none;
+            border-radius: 12px;
+            padding: 16px 24px;
+            font-size: 17px;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            margin-top: 8px;
+        }
+        
+        .modal-button-secondary:active {
+            background: #e5e5e7;
+        }
+
         @media (max-width: 414px) {
             .container {
                 padding: 16px 12px;
@@ -307,6 +471,11 @@
             .scores {
                 grid-template-columns: 1fr;
                 gap: 12px;
+            }
+            
+            .modal {
+                max-width: 90%;
+                margin: 0 20px;
             }
         }
     </style>
@@ -368,6 +537,20 @@
         </div>
         
         <div id="results-container"></div>
+    </div>
+    
+    <!-- iOS-style Modal -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal">
+            <div class="modal-header" id="modal-header">
+                <div class="modal-title" id="modal-title"></div>
+                <div class="modal-subtitle" id="modal-subtitle"></div>
+            </div>
+            <div class="modal-content" id="modal-content"></div>
+            <div class="modal-actions" id="modal-actions">
+                <button class="modal-button" onclick="closeModal()">OK</button>
+            </div>
+        </div>
     </div>
     
     <script src="demo-data.js"></script>
