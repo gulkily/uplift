@@ -22,7 +22,7 @@ function displaySubmission() {
 
 function displayResponses() {
     const container = document.getElementById('responses-container');
-    let html = '<h2>Compassionate Responses (Ranked by Community Votes):</h2>';
+    let html = '<div class="card" style="text-align: center; margin-bottom: 40px;"><h2 style="margin-bottom: 16px;">🏆 Compassionate Responses</h2><p style="color: #666; font-size: 1.1rem;">Ranked by community votes</p></div>';
     
     demoData.responses.sort((a, b) => b.avgScores.empathy + b.avgScores.wisdom + b.avgScores.clarity + b.avgScores.impact - 
                                     (a.avgScores.empathy + a.avgScores.wisdom + a.avgScores.clarity + a.avgScores.impact));
@@ -30,36 +30,70 @@ function displayResponses() {
     demoData.responses.forEach((response, index) => {
         const total = response.avgScores.empathy + response.avgScores.wisdom + response.avgScores.clarity + response.avgScores.impact;
         html += `
-            <div class="response">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                    <strong>Rank #${index + 1} - ${response.creator}</strong>
-                    <div class="earnings">Earned: ${response.earnings} ALGO</div>
+            <div class="card response">
+                <div class="response-header">
+                    <div class="creator">${response.creator}</div>
+                    <div class="rank-badge">Rank #${index + 1}</div>
                 </div>
-                <p>${response.text}</p>
-                <div class="scores">
-                    <div class="score">❤️ Empathy: ${response.avgScores.empathy}/10</div>
-                    <div class="score">🧠 Wisdom: ${response.avgScores.wisdom}/10</div>
-                    <div class="score">💬 Clarity: ${response.avgScores.clarity}/10</div>
-                    <div class="score">⚡ Impact: ${response.avgScores.impact}/10</div>
-                    <div class="score"><strong>Total: ${total.toFixed(1)}/40</strong></div>
+                <div class="response-text">${response.text}</div>
+                <div class="response-stats">
+                    <div class="scores">
+                        <div class="score">
+                            <div class="score-label">Empathy</div>
+                            <div class="score-value">${response.avgScores.empathy}</div>
+                        </div>
+                        <div class="score">
+                            <div class="score-label">Wisdom</div>
+                            <div class="score-value">${response.avgScores.wisdom}</div>
+                        </div>
+                        <div class="score">
+                            <div class="score-label">Clarity</div>
+                            <div class="score-value">${response.avgScores.clarity}</div>
+                        </div>
+                        <div class="score">
+                            <div class="score-label">Impact</div>
+                            <div class="score-value">${response.avgScores.impact}</div>
+                        </div>
+                    </div>
+                    <div class="earnings-section">
+                        <div class="earnings-label">Creator Earnings</div>
+                        <div class="earnings">${response.earnings} ALGO</div>
+                        <div style="margin-top: 12px; font-size: 0.9rem; color: #666;">
+                            ${response.votes} votes • ${response.totalStaked} ALGO staked
+                        </div>
+                    </div>
                 </div>
-                <div style="margin-top: 10px; font-size: 14px; color: #666;">
-                    ${response.votes} votes • ${response.totalStaked} ALGO staked
+                <div style="text-align: center; margin-top: 24px;">
+                    <button class="vote-btn" onclick="startVoting(${response.id})">🗳️ Vote on This Response</button>
                 </div>
-                <button class="vote-btn" onclick="startVoting(${response.id})">Vote on This Response</button>
             </div>
         `;
     });
     
     html += `
-        <div class="voting-stats" style="background: #ecf0f1; padding: 15px; border-radius: 8px; margin: 20px 0;">
-            <h3>🗳️ Voting Statistics:</h3>
-            <p><strong>${demoData.votingStats.totalVotes}</strong> total votes from <strong>${demoData.votingStats.participatingVoters}</strong> community members</p>
-            <p><strong>${demoData.votingStats.totalStaked} ALGO</strong> total staked (${(demoData.votingStats.totalStaked * 0.6).toFixed(1)} ALGO distributed to creators)</p>
-            <p>Average vote price: <strong>$${demoData.votingStats.averageVotePrice}</strong> ALGO</p>
-            <p>Time remaining: <strong>${demoData.votingStats.timeRemaining}</strong></p>
-            <div style="margin-top: 15px; padding: 10px; background: #3498db; color: white; border-radius: 4px;">
-                <strong>💡 How It Works:</strong> Community members pay $2-5 ALGO to vote on responses. Voters who align with consensus earn bonuses, outliers lose stake. 60% of all vote revenue goes directly to response creators!
+        <div class="card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; text-align: center;">
+            <h3 style="margin-bottom: 24px; color: white;">📊 Live Voting Statistics</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px; margin-bottom: 24px;">
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">${demoData.votingStats.totalVotes}</div>
+                    <div style="opacity: 0.9;">Total Votes</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">${demoData.votingStats.totalStaked}</div>
+                    <div style="opacity: 0.9;">ALGO Staked</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">${demoData.votingStats.participatingVoters}</div>
+                    <div style="opacity: 0.9;">Participants</div>
+                </div>
+                <div>
+                    <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">${demoData.votingStats.timeRemaining}</div>
+                    <div style="opacity: 0.9;">Time Left</div>
+                </div>
+            </div>
+            <div style="background: rgba(255,255,255,0.2); padding: 20px; border-radius: 12px; backdrop-filter: blur(10px);">
+                <p style="font-size: 1.1rem; margin-bottom: 16px;"><strong>💡 How the Economics Work</strong></p>
+                <p style="line-height: 1.6; opacity: 0.95;">Community members stake $2-5 ALGO to vote. Voters who align with consensus earn bonuses, outliers lose stake. <strong>60% of all revenue goes directly to response creators!</strong></p>
             </div>
         </div>
     `;
@@ -142,11 +176,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.container');
     const giftButton = document.createElement('div');
     giftButton.innerHTML = `
-        <div style="text-align: center; margin: 30px 0;">
-            <button class="vote-btn" onclick="simulateGiftCredits()" style="background: #e74c3c; font-size: 16px; padding: 15px 30px;">
-                🎁 Try Gifted Credits Demo
+        <div class="card" style="text-align: center; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white;">
+            <h3 style="margin-bottom: 16px; color: white;">🎁 Experience Viral Growth</h3>
+            <p style="margin-bottom: 20px; opacity: 0.9; line-height: 1.6;">See how compassion spreads through personal networks</p>
+            <button class="vote-btn" onclick="simulateGiftCredits()" style="background: rgba(255,255,255,0.2); color: white; border: 2px solid white;">
+                Try Gifted Credits Demo
             </button>
-            <p style="margin-top: 10px; color: #666;">See how compassion spreads through personal networks</p>
         </div>
     `;
     container.appendChild(giftButton);
@@ -154,18 +189,37 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add demo instructions
     const instructions = document.createElement('div');
     instructions.innerHTML = `
-        <div style="background: #2c3e50; color: white; padding: 20px; border-radius: 8px; margin: 30px 0;">
-            <h3>🎮 Demo Instructions</h3>
-            <ol style="margin-left: 20px; margin-top: 10px;">
-                <li><strong>Read the Crisis:</strong> Someone lost their job and needs support</li>
-                <li><strong>Review Responses:</strong> See 4 different compassionate responses ranked by community</li>
-                <li><strong>Vote:</strong> Click "Vote on This Response" to experience the pay-to-vote system</li>
-                <li><strong>Adjust Scores:</strong> Use sliders to rate Empathy, Wisdom, Clarity, Impact</li>
-                <li><strong>Watch Pricing:</strong> Notice how vote price changes based on your scores</li>
-                <li><strong>Submit Vote:</strong> See stake/reward simulation and creator earnings</li>
-                <li><strong>Try Gifting:</strong> Click the gift button to see viral growth mechanics</li>
-            </ol>
-            <p style="margin-top: 15px; font-style: italic;">💡 This demo simulates the full Uplift experience using realistic data and economic mechanics.</p>
+        <div class="card" style="background: linear-gradient(135deg, #2c3e50, #34495e); color: white;">
+            <h3 style="margin-bottom: 20px; color: white;">🎮 How to Use This Demo</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">1. 📖 Read the Crisis</div>
+                    <div style="opacity: 0.9; font-size: 0.95rem;">Someone lost their job and needs compassionate support</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">2. 🏆 Review Responses</div>
+                    <div style="opacity: 0.9; font-size: 0.95rem;">See 4 different responses ranked by community votes</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">3. 🗳️ Cast Your Vote</div>
+                    <div style="opacity: 0.9; font-size: 0.95rem;">Experience the pay-to-vote system with real dynamics</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">4. 📊 Rate Quality</div>
+                    <div style="opacity: 0.9; font-size: 0.95rem;">Use sliders to score Empathy, Wisdom, Clarity, Impact</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">5. 💰 Watch Economics</div>
+                    <div style="opacity: 0.9; font-size: 0.95rem;">See how vote pricing changes with your scores</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.1); padding: 16px; border-radius: 8px;">
+                    <div style="font-weight: 600; margin-bottom: 8px;">6. 🎁 Try Gifting</div>
+                    <div style="opacity: 0.9; font-size: 0.95rem;">Explore viral growth through gifted credits</div>
+                </div>
+            </div>
+            <div style="margin-top: 24px; padding: 16px; background: rgba(255,255,255,0.1); border-radius: 8px; text-align: center;">
+                <p style="font-style: italic; opacity: 0.95;">💡 This demo simulates the complete Uplift experience with realistic economics</p>
+            </div>
         </div>
     `;
     container.appendChild(instructions);
