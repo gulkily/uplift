@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uplift Testnet - Live Smart Contract Demo</title>
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.7; 
+            color: #2c3e50; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { 
+            max-width: 1000px; 
+            margin: 0 auto; 
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+        
+        h1 { 
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            font-weight: 300;
+            margin-bottom: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            margin-bottom: 32px;
+            overflow: hidden;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 24px 32px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+        
+        .card-content {
+            padding: 32px;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .status-connected {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status-disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white; 
+            padding: 14px 28px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+            margin: 8px;
+        }
+        
+        .btn:hover { 
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d, #495057);
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+        }
+        
+        .btn-secondary:hover {
+            box-shadow: 0 6px 20px rgba(108, 117, 125, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #dc3545, #c82333);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 6px 20px rgba(220, 53, 69, 0.4);
+        }
+        
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .vote-sliders {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin: 24px 0;
+        }
+        
+        .slider-group {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .slider-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .slider-value {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            min-width: 32px;
+            text-align: center;
+        }
+        
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e9ecef;
+            outline: none;
+            -webkit-appearance: none;
+        }
+        
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border: 2px solid #b3d9ff;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .error-box {
+            background: #f8d7da;
+            border: 2px solid #f5c6cb;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .address-display {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            word-break: break-all;
+            margin: 12px 0;
+        }
+        
+        .balance-display {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 16px 0;
+        }
+        
+        .transaction-log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 12px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+            margin: 20px 0;
+        }
+        
+        .transaction-log:empty::before {
+            content: "No transactions yet...";
+            opacity: 0.6;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 16px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .vote-sliders {
+                grid-template-columns: 1fr;
+            }
+            
+            .card-content {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Uplift Testnet</h1>
+            <p class="subtitle">Live Smart Contract Integration on Algorand Testnet</p>
+            <div class="warning-box" style="color: #856404; text-align: left;">
+                <strong>⚠️ Testnet Environment:</strong> This is using Algorand TestNet with test ALGO tokens. No real money involved.
+            </div>
+        </div>
+        
+        <!-- Connection Status -->
+        <div class="card">
+            <div class="card-header">
+                🔗 Connection Status
+            </div>
+            <div class="card-content">
+                <div id="connection-status" class="status status-disconnected">
+                    Disconnected
+                </div>
+                <div id="wallet-info" class="hidden">
+                    <div class="form-group">
+                        <label class="form-label">Connected Address:</label>
+                        <div id="wallet-address" class="address-display"></div>
+                    </div>
+                    <div id="balance-info" class="balance-display">
+                        Balance: <span id="wallet-balance">0</span> ALGO
+                    </div>
+                </div>
+                <button id="connect-wallet" class="btn">Connect Wallet</button>
+                <button id="disconnect-wallet" class="btn btn-secondary hidden">Disconnect</button>
+            </div>
+        </div>
+
+        <!-- Contract Information -->
+        <div class="card">
+            <div class="card-header">
+                📋 Smart Contract Information
+            </div>
+            <div class="card-content">
+                <div class="info-box">
+                    <h4>Testnet Contract Details:</h4>
+                    <p><strong>Application ID:</strong> <span id="contract-app-id">Will be deployed</span></p>
+                    <p><strong>Contract Address:</strong> <span id="contract-address">N/A</span></p>
+                    <p><strong>Network:</strong> Algorand TestNet</p>
+                    <p><strong>Status:</strong> <span id="contract-status">Not deployed</span></p>
+                </div>
+                <button id="deploy-contract" class="btn">Deploy Contract</button>
+                <button id="fund-contract" class="btn btn-secondary hidden">Fund Contract</button>
+            </div>
+        </div>
+
+        <!-- Funding Instructions -->
+        <div class="card">
+            <div class="card-header">
+                💰 Get TestNet Funding
+            </div>
+            <div class="card-content">
+                <div class="warning-box">
+                    <h4>🏦 Your TestNet Address:</h4>
+                    <div class="address-display">
+                        WB62SP4LFUKZSMJD7G3ENTCHEZVEKW3FYAJ64HV2IU6W52ZQRDSOR3JOQY
+                    </div>
+                    <p><strong>Instructions:</strong></p>
+                    <ol style="margin-left: 20px; margin-top: 10px;">
+                        <li>Visit the <a href="https://testnet.algoexplorer.io/dispenser" target="_blank" style="color: #667eea;">Algorand TestNet Dispenser</a></li>
+                        <li>Enter your wallet address (shown above when connected)</li>
+                        <li>Request TestNet ALGO tokens (free)</li>
+                        <li>Wait for the transaction to complete</li>
+                        <li>Refresh your balance using the button below</li>
+                    </ol>
+                </div>
+                <button id="refresh-balance" class="btn btn-secondary">🔄 Refresh Balance</button>
+                <button id="copy-address" class="btn btn-secondary">📋 Copy My Address</button>
+            </div>
+        </div>
+
+        <!-- Voting Interface -->
+        <div class="card">
+            <div class="card-header">
+                🗳️ Live Testnet Voting
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label class="form-label">Response ID to Vote On:</label>
+                    <input type="number" id="response-id" class="form-input" placeholder="Enter response ID (e.g., 101)" value="101">
+                </div>
+                
+                <div id="vote-price-display" class="info-box">
+                    <h4>💰 Current Vote Price: <span id="current-vote-price">2.5</span> ALGO</h4>
+                    <p>Price updates dynamically based on demand and your quality scores</p>
+                </div>
+
+                <div class="vote-sliders">
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>❤️ Empathy</span>
+                            <span class="slider-value" id="empathy-val">5</span>
+                        </div>
+                        <input type="range" id="empathy" min="1" max="10" value="5">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>🧠 Wisdom</span>
+                            <span class="slider-value" id="wisdom-val">5</span>
+                        </div>
+                        <input type="range" id="wisdom" min="1" max="10" value="5">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>💡 Clarity</span>
+                            <span class="slider-value" id="clarity-val">5</span>
+                        </div>
+                        <input type="range" id="clarity" min="1" max="10" value="5">
+                    </div>
+                    
+                    <div class="slider-group">
+                        <div class="slider-label">
+                            <span>⚡ Impact</span>
+                            <span class="slider-value" id="impact-val">5</span>
+                        </div>
+                        <input type="range" id="impact" min="1" max="10" value="5">
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 32px;">
+                    <button id="get-vote-price" class="btn btn-secondary">📊 Get Current Price</button>
+                    <button id="submit-vote" class="btn">🚀 Submit Vote to TestNet</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Interface -->
+        <div class="card">
+            <div class="card-header">
+                📊 Live Contract Results
+            </div>
+            <div class="card-content">
+                <div class="form-group">
+                    <label class="form-label">Get Results for Response ID:</label>
+                    <input type="number" id="results-response-id" class="form-input" placeholder="Enter response ID" value="101">
+                </div>
+                <button id="get-results" class="btn btn-secondary">📈 Get Live Results</button>
+                <div id="results-display" class="info-box hidden">
+                    <h4>📊 Live Voting Results:</h4>
+                    <div id="results-content"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transaction Log -->
+        <div class="card">
+            <div class="card-header">
+                📝 Transaction Log
+            </div>
+            <div class="card-content">
+                <div id="transaction-log" class="transaction-log"></div>
+                <button id="clear-log" class="btn btn-secondary">🗑️ Clear Log</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Algorand SDK -->
+    <script src="https://unpkg.com/algosdk@2.7.0/dist/browser/algosdk.min.js"></script>
+    <script src="testnet-integration.js"></script>
+</body>
+</html>
