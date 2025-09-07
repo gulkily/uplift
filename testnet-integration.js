@@ -13,7 +13,8 @@ class UpliftTestnetIntegration {
         this.testnetConfig = {
             server: 'https://testnet-api.algonode.cloud',
             port: 443,
-            token: ''
+            token: '',
+            demoAddress: 'ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4'
         };
         
         this.init();

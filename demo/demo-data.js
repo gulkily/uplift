@@ -8,51 +8,51 @@ const demoData = {
     responses: [
         {
             id: 101,
-            creator: "Sarah M. (Career Coach)",
-            text: "I can feel the weight of your fear and uncertainty, and I want you to know that what you're experiencing is completely valid. Losing a job, especially after 8 years, isn't just about losing income—it's about losing identity and security. First, breathe. You are not a failure; you're someone dealing with an incredibly difficult situation. Here's what I suggest: 1) Apply for unemployment benefits TODAY if you haven't already. 2) Make a list of your accomplishments from those 8 years—you have valuable skills. 3) Reach out to former colleagues; many jobs come through networks. 4) Consider this a chance to reassess what you actually want in your career. You've got this, one day at a time.",
-            votes: 47,
-            totalStaked: 127.3,
-            avgScores: { empathy: 9.4, wisdom: 9.1, clarity: 8.9, impact: 9.2 },
-            earnings: 76.4,
+            creator: "Maria Santos (HR Director & Mom)",
+            text: "My heart goes out to you - I see the courage it took to reach out when you're feeling so vulnerable. After 8 years of dedication, losing your job doesn't define your worth; it reveals your strength in seeking help. As someone who's hired hundreds of people, let me share what I know: Your 8-year tenure shows loyalty and reliability - qualities employers treasure. Tonight, hold your children close and remember you're modeling resilience. Tomorrow, file for unemployment (no shame in using what you've paid into), then write down every project you're proud of from those 8 years. Your skills haven't disappeared; they're ready for their next chapter. You're not starting over - you're building forward.",
+            votes: 52,
+            totalStaked: 142.8,
+            avgScores: { empathy: 9.8, wisdom: 9.4, clarity: 9.2, impact: 9.6 },
+            earnings: 85.7,
             rank: 1
         },
         {
             id: 102,
-            creator: "Mike R. (Former Executive)",
-            text: "Been exactly where you are. Lost my job at 36 with three kids. Felt like the world ended. Here's what worked: 1) Cut expenses immediately - call creditors, they often work with you. 2) Update LinkedIn and resume SAME DAY. 3) Apply to unemployment. 4) Network like your life depends on it because it does. 5) Consider contract/temp work to bridge income. The shame you feel? It's lying to you. You're a provider who hit a rough patch, not a failure. I'm now doing better than ever. This is temporary.",
-            votes: 52,
-            totalStaked: 118.6,
-            avgScores: { empathy: 8.9, wisdom: 9.3, clarity: 9.1, impact: 8.8 },
-            earnings: 71.2,
+            creator: "David Kim (Father of 3, Tech Leader)",
+            text: "Brother, I've stood exactly where you're standing. Five years ago, I was laid off from my dream job with a newborn and two toddlers. The fear was suffocating. But here's what I learned: this moment, as terrifying as it feels, can become the foundation of something beautiful. Start with breath work - 4 counts in, hold for 4, out for 4. It saved my sanity. Then, practical magic: reach out to EVERYONE you know. I found my current role (which I love more than my old one) through a college friend I hadn't spoken to in years. Your children are watching you navigate this storm - show them that setbacks don't sink ships; they teach us to sail stronger.",
+            votes: 48,
+            totalStaked: 135.4,
+            avgScores: { empathy: 9.6, wisdom: 9.2, clarity: 9.1, impact: 9.3 },
+            earnings: 81.2,
             rank: 2
         },
         {
             id: 103,
-            creator: "Dr. Jennifer L. (Therapist)",
-            text: "What you're experiencing - the fear, the sense of failure, the overwhelm - these are normal grief responses to a major life change. Your nervous system is in survival mode right now. While practical steps matter, your mental health comes first. Practice this: When panic hits, name 5 things you can see, 4 you can touch, 3 you can hear, 2 you can smell, 1 you can taste. This grounds you in the present. Remember: You successfully held a job for 8 years during a time when many couldn't. That's not failure - that's resilience. You will find work again.",
-            votes: 38,
-            totalStaked: 89.2,
-            avgScores: { empathy: 9.6, wisdom: 8.4, clarity: 8.6, impact: 8.9 },
-            earnings: 53.5,
+            creator: "Dr. Rachel Chen (Career Counselor & Therapist)",
+            text: "What you're feeling isn't weakness - it's your human heart responding to profound change. Job loss ranks among life's most stressful events, right alongside divorce and moving. Your grief is valid, your fear is understandable, and your love for your children shines through every word. Here's gentle wisdom from 15 years of helping people through transitions: This ending is also a beginning. While you search, create micro-moments of hope - read to your kids, take a walk, call someone who believes in you. Your worth isn't your paycheck. Your children need their parent whole more than they need everything perfect. You have gifts this world needs; we just need to help you remember what they are.",
+            votes: 44,
+            totalStaked: 118.9,
+            avgScores: { empathy: 9.9, wisdom: 8.8, clarity: 8.9, impact: 9.1 },
+            earnings: 71.3,
             rank: 3
         },
         {
             id: 104,
-            creator: "Anonymous",
-            text: "Everything happens for a reason. Maybe this is the universe telling you to pursue your dreams! Use this time to start that business you always wanted or learn new skills. Stay positive!",
-            votes: 12,
-            totalStaked: 31.5,
-            avgScores: { empathy: 6.2, wisdom: 5.8, clarity: 7.1, impact: 6.4 },
-            earnings: 18.9,
+            creator: "James Rivera (Single Dad, Entrepreneur)",
+            text: "My friend, I want to wrap you in the biggest hug right now. When I lost my job as a single dad, a wise woman told me: 'You're not broken, you're between stories.' Your next chapter is being written, and while it feels scary, it might just be your best one yet. Here's what helped me survive and eventually thrive: Join parent groups on Facebook - other parents share job leads constantly. Visit your local library - free WiFi, quiet job search space, and librarians who know about resources you've never heard of. Most importantly, tell your kids age-appropriate truth: 'Daddy's looking for a new job where he can help people even better.' Kids handle honesty better than they handle sensing your hidden stress. You've got this, warrior.",
+            votes: 41,
+            totalStaked: 108.7,
+            avgScores: { empathy: 9.5, wisdom: 8.9, clarity: 9.0, impact: 8.8 },
+            earnings: 65.2,
             rank: 4
         }
     ],
     votingStats: {
-        totalVotes: 149,
-        totalStaked: 366.6,
-        averageVotePrice: 2.46,
-        timeRemaining: "23 hours",
-        participatingVoters: 89
+        totalVotes: 185,
+        totalStaked: 505.8,
+        averageVotePrice: 2.73,
+        timeRemaining: "22 hours",
+        participatingVoters: 127
     }
 };
 

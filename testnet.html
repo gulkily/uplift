@@ -271,6 +271,30 @@
             display: none;
         }
         
+        .floating-explorer {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 16px;
+            border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .floating-explorer:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+        }
+        
         @media (max-width: 768px) {
             .container {
                 padding: 16px;
@@ -350,7 +374,7 @@
                 <div class="warning-box">
                     <h4>🏦 Your TestNet Address:</h4>
                     <div class="address-display">
-                        WB62SP4LFUKZSMJD7G3ENTCHEZVEKW3FYAJ64HV2IU6W52ZQRDSOR3JOQY
+                        ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4
                     </div>
                     <p><strong>Instructions:</strong></p>
                     <ol style="margin-left: 20px; margin-top: 10px;">
@@ -363,6 +387,14 @@
                 </div>
                 <button id="refresh-balance" class="btn btn-secondary">🔄 Refresh Balance</button>
                 <button id="copy-address" class="btn btn-secondary">📋 Copy My Address</button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+                    <a href="https://testnet.algoexplorer.io/address/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4" target="_blank" class="btn" style="text-decoration: none; text-align: center;">
+                        🔍 View on Explorer
+                    </a>
+                    <a href="https://testnet.algoexplorer.io/address/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4/transactions" target="_blank" class="btn btn-secondary" style="text-decoration: none; text-align: center;">
+                        📋 View Transactions
+                    </a>
+                </div>
             </div>
         </div>
 
@@ -453,6 +485,11 @@
         </div>
 
     </div>
+
+    <!-- Floating Explorer Button -->
+    <a href="https://testnet.algoexplorer.io/address/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4" target="_blank" class="floating-explorer">
+        🔍 Live Explorer
+    </a>
 
     <!-- Algorand SDK -->
     <script src="https://unpkg.com/algosdk@2.7.0/dist/browser/algosdk.min.js"></script>

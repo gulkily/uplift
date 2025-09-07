@@ -172,8 +172,29 @@ document.addEventListener('DOMContentLoaded', function() {
     displaySubmission();
     displayResponses();
     
-    // Add gift credits demo button
+    // Add TestNet links section
     const container = document.querySelector('.container');
+    const testnetSection = document.createElement('div');
+    testnetSection.innerHTML = `
+        <div class="card" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; text-align: center;">
+            <h3 style="margin-bottom: 16px; color: white;">🚀 Try Real TestNet Integration</h3>
+            <p style="margin-bottom: 20px; opacity: 0.9; line-height: 1.6;">Experience actual blockchain transactions with test ALGO</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <a href="testnet.html" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
+                    🔗 TestNet Demo
+                </a>
+                <a href="https://testnet.algoexplorer.io/address/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
+                    🔍 View Explorer
+                </a>
+                <a href="https://testnet.algoexplorer.io/address/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4/transactions" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
+                    📋 Transactions
+                </a>
+            </div>
+        </div>
+    `;
+    container.appendChild(testnetSection);
+    
+    // Add gift credits demo button
     const giftButton = document.createElement('div');
     giftButton.innerHTML = `
         <div class="card" style="text-align: center; background: linear-gradient(135deg, #e74c3c, #c0392b); color: white;">
