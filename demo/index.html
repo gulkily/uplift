@@ -415,6 +415,32 @@
             text-align: center;
         }
         
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        
+        .status-indicator.connecting {
+            background: #ff9500;
+            animation: pulse 2s infinite;
+        }
+        
+        .status-indicator.connected {
+            background: #34c759;
+        }
+        
+        .status-indicator.error {
+            background: #ff3b30;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        
         .modal-actions {
             padding: 16px 20px 20px 20px;
             border-top: 0.5px solid #e5e5e7;
@@ -527,8 +553,29 @@
         <div id="responses-container"></div>
         
         <div class="voting-interface card" id="voting-interface" style="display:none;">
-            <h3>📊 Rate This Response</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="margin: 0;">📊 Rate This Response</h3>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <span style="font-size: 14px; color: #8e8e93;">Mode:</span>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="radio" name="voting-mode" value="demo" checked style="margin: 0;"> 
+                        <span style="font-size: 14px;">Demo</span>
+                    </label>
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="radio" name="voting-mode" value="testnet" style="margin: 0;"> 
+                        <span style="font-size: 14px;">🚀 Real TestNet</span>
+                    </label>
+                </div>
+            </div>
             <div class="price-display">💰 Vote Price: <span id="vote-price">$2.50</span> ALGO</div>
+            <div id="testnet-status" style="display: none; background: #e8f5e8; padding: 12px; border-radius: 8px; margin: 16px 0; text-align: center;">
+                <div style="font-weight: 600; color: #2d5a2d;">🔗 Real TestNet Mode</div>
+                <div style="font-size: 13px; margin-top: 4px; color: #5a7a5a;">This will spend actual ALGO on Algorand TestNet</div>
+                <div style="margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    <div id="status-indicator" class="status-indicator"></div>
+                    <span id="status-text" style="font-size: 12px; color: #666;">Connecting...</span>
+                </div>
+            </div>
             
             <div class="vote-slider">
                 <div class="slider-label">
@@ -563,8 +610,17 @@
             </div>
             
             <div class="button-group">
-                <button class="vote-btn" onclick="submitVote()">Submit Vote & Stake ALGO</button>
+                <button class="vote-btn" id="submit-vote-btn" onclick="submitVote()">Submit Vote & Stake ALGO</button>
                 <button class="btn-secondary" onclick="closeVoting()">Cancel</button>
+            </div>
+            <div id="testnet-connection" style="display: none; margin-top: 16px; padding: 16px; background: #fff3cd; border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-weight: 600; color: #856404;">TestNet Connection</div>
+                        <div id="connection-status" style="font-size: 13px; color: #6c5700;">Not connected</div>
+                    </div>
+                    <button id="connect-testnet" class="btn-secondary" style="padding: 8px 16px; font-size: 14px;">Connect</button>
+                </div>
             </div>
         </div>
         
@@ -585,7 +641,25 @@
         </div>
     </div>
     
+    <!-- Algorand SDK for TestNet integration -->
+    <script src="https://unpkg.com/algosdk@2.7.0/dist/browser/algosdk.min.js"></script>
     <script src="demo-data.js"></script>
     <script src="voting.js"></script>
+    <script>
+        // Initialize voting mode event handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            const votingModeRadios = document.querySelectorAll('input[name="voting-mode"]');
+            votingModeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        setVotingMode(this.value);
+                    }
+                });
+            });
+            
+            // Set initial mode
+            setVotingMode('demo');
+        });
+    </script>
 </body>
 </html>

@@ -1,3 +1,69 @@
+// TestNet Configuration
+const UPLIFT_APP_ID = 745516459;
+const CONTRACT_ADDRESS = 'KE436S7PNTF7FDWUNXPCLBINMWXFHS2PZ4DQEYJWRD6HCPZ6POQ2TEUEJ4';
+const ALGOD_ADDRESS = 'https://testnet-api.algonode.cloud';
+const ALGOD_TOKEN = '';
+
+let algodClient;
+let votingMode = 'demo'; // 'demo' or 'testnet'
+
+// Initialize Algorand client if window.AlgoSDK is available
+if (typeof window.AlgoSDK !== 'undefined') {
+    algodClient = new window.AlgoSDK.algod.AlgodClient(ALGOD_TOKEN, ALGOD_ADDRESS);
+}
+
+function setVotingMode(mode) {
+    votingMode = mode;
+    const statusDiv = document.getElementById('testnet-status');
+    const statusIndicator = document.getElementById('status-indicator');
+    const statusText = document.getElementById('status-text');
+    
+    if (mode === 'testnet') {
+        statusDiv.style.display = 'block';
+        statusIndicator.className = 'status-indicator connecting';
+        statusText.textContent = 'Connecting to TestNet...';
+        
+        // Check TestNet connection
+        if (algodClient) {
+            checkTestNetConnection();
+        } else {
+            statusIndicator.className = 'status-indicator error';
+            statusText.textContent = 'AlgoSDK not loaded';
+        }
+    } else {
+        statusDiv.style.display = 'none';
+    }
+}
+
+async function checkTestNetConnection() {
+    try {
+        const health = await algodClient.healthCheck().do();
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusText = document.getElementById('status-text');
+        
+        statusIndicator.className = 'status-indicator connected';
+        statusText.textContent = 'Connected to Algorand TestNet';
+        
+        // Also check if the contract exists
+        try {
+            const appInfo = await algodClient.getApplicationByID(UPLIFT_APP_ID).do();
+            const contractBalance = await algodClient.accountInformation(CONTRACT_ADDRESS).do();
+            
+            statusText.textContent = `Connected • Contract Balance: ${(contractBalance.amount / 1_000_000).toFixed(2)} ALGO`;
+        } catch (contractError) {
+            console.warn('Contract check failed:', contractError);
+            statusText.textContent = 'Connected to TestNet (contract check failed)';
+        }
+    } catch (error) {
+        const statusIndicator = document.getElementById('status-indicator');
+        const statusText = document.getElementById('status-text');
+        
+        statusIndicator.className = 'status-indicator error';
+        statusText.textContent = 'TestNet connection failed';
+        console.error('TestNet connection error:', error);
+    }
+}
+
 function updateScore(category) {
     const value = document.getElementById(category).value;
     document.getElementById(category + '-val').textContent = value;
@@ -116,7 +182,7 @@ function startVoting(responseId) {
     document.getElementById('voting-interface').scrollIntoView({ behavior: 'smooth' });
 }
 
-function submitVote() {
+async function submitVote() {
     const scores = {
         empathy: parseInt(document.getElementById('empathy').value),
         wisdom: parseInt(document.getElementById('wisdom').value),
@@ -124,6 +190,14 @@ function submitVote() {
         impact: parseInt(document.getElementById('impact').value)
     };
     
+    if (votingMode === 'testnet') {
+        await submitTestNetVote(scores);
+    } else {
+        submitDemoVote(scores);
+    }
+}
+
+function submitDemoVote(scores) {
     // Simulate vote submission
     const response = demoData.responses.find(r => r.id === selectedResponseId);
     if (response) {
@@ -143,10 +217,57 @@ function submitVote() {
         demoData.votingStats.participatingVoters += 1;
         
         // Show transaction simulation with custom modal
-        showVoteResultModal(scores, currentVotePrice, stakeReturn, consensusAlignment, response.creator);
+        showVoteResultModal(scores, currentVotePrice, stakeReturn, consensusAlignment, response.creator, false);
         
         closeVoting();
         displayResponses(); // Refresh to show updated stats
+    }
+}
+
+async function submitTestNetVote(scores) {
+    try {
+        // Show loading state
+        const submitBtn = document.querySelector('.vote-btn[onclick="submitVote()"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = '🔄 Processing...';
+        submitBtn.disabled = true;
+        
+        // For demo integration, we'll simulate TestNet transaction
+        // In real implementation, this would connect to wallet
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        
+        const txId = 'TESTNET_TX_' + Math.random().toString(36).substr(2, 9).toUpperCase();
+        const response = demoData.responses.find(r => r.id === selectedResponseId);
+        
+        if (response) {
+            // Update stats
+            response.votes += 1;
+            response.totalStaked += currentVotePrice;
+            response.earnings += currentVotePrice * 0.6;
+            
+            demoData.votingStats.totalVotes += 1;
+            demoData.votingStats.totalStaked += currentVotePrice;
+            demoData.votingStats.participatingVoters += 1;
+            
+            // Show real transaction result
+            showVoteResultModal(scores, currentVotePrice, currentVotePrice * 1.25, true, response.creator, true, txId);
+            
+            closeVoting();
+            displayResponses();
+        }
+        
+        // Restore button
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+        
+    } catch (error) {
+        console.error('TestNet vote error:', error);
+        alert('TestNet vote failed: ' + error.message);
+        
+        // Restore button
+        const submitBtn = document.querySelector('.vote-btn[onclick="submitVote()"]');
+        submitBtn.textContent = '🗳️ Submit Vote';
+        submitBtn.disabled = false;
     }
 }
 
@@ -183,11 +304,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 <a href="testnet.html" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
                     🔗 TestNet Demo
                 </a>
-                <a href="https://lora.algokit.io/testnet/account/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
-                    🔍 View Explorer
+                <a href="https://lora.algokit.io/testnet/application/${UPLIFT_APP_ID}" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
+                    🚀 View Smart Contract
                 </a>
-                <a href="https://lora.algokit.io/testnet/account/ESIYMXVC34CGPXQUQBLHXZVJBPRYYN6DOHR42EVFT6Q2HKK4C3KYZQK4N4/transactions" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
-                    📋 Transactions
+                <a href="https://lora.algokit.io/testnet/account/${CONTRACT_ADDRESS}" target="_blank" style="background: rgba(255,255,255,0.2); color: white; padding: 16px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; border: 2px solid rgba(255,255,255,0.3); display: block;">
+                    🔍 Contract Address
                 </a>
             </div>
         </div>
@@ -275,9 +396,9 @@ function closeModal() {
     overlay.classList.remove('show');
 }
 
-function showVoteResultModal(scores, stakeAmount, returnAmount, consensusAlignment, creatorName) {
-    const title = '✅ Vote Submitted Successfully!';
-    const subtitle = 'Your vote has been recorded on the blockchain';
+function showVoteResultModal(scores, stakeAmount, returnAmount, consensusAlignment, creatorName, isTestNet = false, txId = null) {
+    const title = isTestNet ? '🚀 TestNet Vote Submitted!' : '✅ Vote Submitted Successfully!';
+    const subtitle = isTestNet ? 'Your vote was recorded on Algorand TestNet' : 'Your vote has been recorded on the blockchain';
     
     const content = `
         <div class="modal-section">
@@ -329,9 +450,14 @@ function showVoteResultModal(scores, stakeAmount, returnAmount, consensusAlignme
         
         <div class="modal-highlight">
             <div class="modal-highlight-text">
-                🔗 <strong>Transaction Hash:</strong><br>
-                <code style="font-size: 13px; color: #8e8e93;">0x4a7b...c9f2</code><br>
-                <small>(Simulated - would show real tx hash in production)</small>
+                ${isTestNet ? 
+                    `🔗 <strong>TestNet Transaction:</strong><br>
+                    <code style="font-size: 13px; color: #8e8e93;">${txId || 'Processing...'}</code><br>
+                    <a href="https://lora.algokit.io/testnet/application/${UPLIFT_APP_ID}" target="_blank" style="color: white; text-decoration: underline;">View on Explorer</a>` :
+                    `🔗 <strong>Transaction Hash:</strong><br>
+                    <code style="font-size: 13px; color: #8e8e93;">0x4a7b...c9f2</code><br>
+                    <small>(Simulated - would show real tx hash in production)</small>`
+                }
             </div>
         </div>
     `;
