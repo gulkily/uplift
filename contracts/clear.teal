@@ -1,0 +1,4 @@
+#pragma version 8
+// Clear program for Uplift contracts
+// Always returns 1 (allow clearing)
+int 1
