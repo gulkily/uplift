@@ -176,13 +176,19 @@
             
             const fullCode = `// Add these to the responses array in demo/demo-data.js:\n${jsCode}`;
             
-            // Copy to clipboard
-            navigator.clipboard.writeText(fullCode).then(() => {
-                alert('JavaScript code copied to clipboard! Paste it into demo/demo-data.js');
-            });
+            // Create textarea and copy
+            const textarea = document.createElement('textarea');
+            textarea.value = fullCode;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
             
-            // Also log to console
-            console.log(fullCode);
+            alert('Code copied! Paste into demo/demo-data.js');
+            
+            // Also show in a popup for manual copy
+            const popup = window.open('', '_blank', 'width=600,height=400');
+            popup.document.write(`<pre style="font-family:monospace;padding:20px;">${fullCode}</pre>`);
         });
     </script>
 </body>
