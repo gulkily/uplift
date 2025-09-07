@@ -1,0 +1,21 @@
+The application allows users to compete for the kindest, wisest, funniest, calmest, etc., most uplifting text responses to stated submissions.
+
+It has to be on the Algorand blockchain and follow the other specified criteria.
+
+The competition is judged by humans.
+
+The rewards for the submitters is Algorand currency.
+
+The credits for the rewards come from ? (ideas needed).
+
+The submissions can be from anyone, including AI.
+
+It should include up-to-date thoughts, and the problems can be user-submitted and also fed from a news feed. Things that people care about.
+
+Things that can be shared are in at least 2 categories:
+- joy (people can celebrate each other)
+- sorrow (people can support each other)
+
+Categories of each response, multiple scales: wise, kind, thoughtful, funny, calm, peaceful, etc.
+
+Audience: religious people, educators, philosophers, ??

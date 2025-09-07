@@ -1,0 +1,15 @@
+Submissions will be graded on a 1-10 scale in each of the following categories:
+
+Innovation and Originality: The novelty of the solution and its potential to disrupt or significantly improve upon existing services.
+
+Usability and Design: The application's user experience and interface design, ensuring accessibility and ease of use for its intended audience.
+
+Impact Potential: The applicability and scalability of the solution in real-world scenarios, including its potential for adoption and the breadth of its impact on the target market or sector.
+
+Feasibility: The practicality of implementing the solution and the clarity of the implementation plan.
+
+Use of the Blockchain: Effective use of smart contracts on Algorand in the solution, demonstrating an understanding of their benefits and limitations.
+
+(For coding submissions) Technical Implementation: The robustness, security, and efficiency of the application’s codebase. Proper use of smart contracts and adherence to best practices in dApp development will be crucial. You must have built your own smart contract on Algorand. Simply copy/pasting from another pre-existing project will not satisfy the criteria.
+
+

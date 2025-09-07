@@ -1,0 +1,7 @@
+- **PRESENTING STRUCTURE** | Follow this structure when presenting:
+    1. First 30 seconds for each team member to introduce yourselves (which employer/university you’re from, which year, what you’re majoring in etc). **Make sure you have a team slide!**
+    2. Next 30 seconds to explain the problem you’re solving
+    3. Next 30 seconds to explain your solution and grand vision - show off how big this can get
+    4. Next 30 seconds showing off your demo - show off how much you achieved!
+    5. Next 30 seconds explaining how you used Algorand in your project
+    6. Final 30 seconds on future roadmap and what you’ll do next

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uplift - Pay-to-Vote Compassion</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; background: #f4f4f4; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 30px; }
+        .submission { background: white; padding: 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .response { background: white; margin: 20px 0; padding: 20px; border-radius: 8px; border-left: 4px solid #3498db; }
+        .scores { display: flex; gap: 15px; margin: 10px 0; }
+        .score { background: #ecf0f1; padding: 5px 10px; border-radius: 4px; font-size: 14px; }
+        .vote-btn { background: #27ae60; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 10px 5px; }
+        .vote-btn:hover { background: #219a52; }
+        .earnings { color: #e74c3c; font-weight: bold; }
+        .voting-interface { background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+        .vote-slider { margin: 10px 0; }
+        .price-display { font-size: 18px; color: #2c3e50; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤗 Uplift: Compassionate Wisdom Marketplace</h1>
+        
+        <div class="submission">
+            <h2>Current Situation Needing Support:</h2>
+            <p id="current-submission"></p>
+        </div>
+        
+        <div id="responses-container"></div>
+        
+        <div class="voting-interface" id="voting-interface" style="display:none;">
+            <h3>Vote on Response (Stake Required)</h3>
+            <div class="price-display">Current Vote Price: <span id="vote-price">$2.50</span> ALGO</div>
+            <div class="vote-slider">
+                <label>Empathy (1-10): <span id="empathy-val">5</span></label>
+                <input type="range" id="empathy" min="1" max="10" value="5" oninput="updateScore('empathy')">
+            </div>
+            <div class="vote-slider">
+                <label>Wisdom (1-10): <span id="wisdom-val">5</span></label>
+                <input type="range" id="wisdom" min="1" max="10" value="5" oninput="updateScore('wisdom')">
+            </div>
+            <div class="vote-slider">
+                <label>Clarity (1-10): <span id="clarity-val">5</span></label>
+                <input type="range" id="clarity" min="1" max="10" value="5" oninput="updateScore('clarity')">
+            </div>
+            <div class="vote-slider">
+                <label>Impact (1-10): <span id="impact-val">5</span></label>
+                <input type="range" id="impact" min="1" max="10" value="5" oninput="updateScore('impact')">
+            </div>
+            <button class="vote-btn" onclick="submitVote()">Submit Vote & Stake ALGO</button>
+            <button class="vote-btn" style="background:#95a5a6" onclick="closeVoting()">Cancel</button>
+        </div>
+        
+        <div id="results-container"></div>
+    </div>
+    
+    <script src="demo-data.js"></script>
+    <script src="voting.js"></script>
+</body>
+</html>

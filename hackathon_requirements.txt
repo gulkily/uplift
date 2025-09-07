@@ -1,0 +1,13 @@
+Build an app on Algorand where blockchain powers trustless payments, verifiable data, user-owned identity, or programmable digital assets; all with speed, simplicity, and global scale.
+
+Other potential options
+
+- Build a dApp on Algorand where AI agents enable autonomous commerce, peer-to-peer payments, decentralized lending, or real-time data exchange, all secured by transparency, auditability, and instant finality.
+
+- Create on Algorand the next generation of financial primitives: yield-bearing stablecoins, programmable payroll, modular lending markets, or cross-border microlending, all with low fees, global reach, and verifiable execution.
+
+- Develop a platform on Algorand that blends blockchain and AI: smart contract copilots, on-chain audits, decentralized model training, or tokenized feedback loops, combining trustless infrastructure with cutting-edge intelligence.
+
+- Build an open marketplace on Algorand for tokenized assets where users can trade commodities, real-world assets, digital identities, or synthetic yields, all with security, simplicity, and scale baked in.
+
+- Use Algorand to design the future of social and science applications: SocialFi, DeSci, proof of personhood, or stablecoin-powered credit, all with verifiable outcomes and user-owned data.
