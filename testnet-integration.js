@@ -268,7 +268,7 @@ class UpliftTestnetIntegration {
         }
         
         try {
-            this.log('🗳️ Submitting vote to TestNet...');
+            this.log('🗳️ Submitting REAL vote to TestNet...');
             
             // Get current scores
             const empathy = parseInt(document.getElementById('empathy').value);
@@ -311,29 +311,55 @@ class UpliftTestnetIntegration {
             const groupedTxns = [paymentTxn, appCallTxn];
             algosdk.assignGroupID(groupedTxns);
             
-            // For demo purposes, simulate successful transaction
-            const txId = 'DEMO' + Math.random().toString(36).substring(7).toUpperCase();
+            this.log('📝 Signing transactions...');
             
-            this.log('✅ Vote submitted successfully!');
+            // Sign transactions based on wallet type
+            let signedTxns;
+            if (this.wallet.connector && this.wallet.connector.signTransaction) {
+                // Real wallet signing
+                this.log('🔐 Using real wallet for signing...');
+                signedTxns = await this.wallet.connector.signTransaction([
+                    groupedTxns[0],
+                    groupedTxns[1]
+                ]);
+            } else if (this.wallet.sk) {
+                // Test account signing
+                this.log('🔐 Using test account for signing...');
+                signedTxns = [
+                    groupedTxns[0].sign(this.wallet.sk),
+                    groupedTxns[1].sign(this.wallet.sk)
+                ];
+            } else {
+                throw new Error('No signing method available');
+            }
+            
+            this.log('🚀 Broadcasting to TestNet...');
+            
+            // Submit transactions
+            const response = await this.algodClient.sendRawTransaction(signedTxns).do();
+            const txId = response.txId;
+            
+            this.log('✅ REAL vote submitted to TestNet!');
             this.log('🔗 Transaction ID: ' + txId);
             this.log('🎯 Response ID: ' + responseId);
-            this.log('💸 Staked: ' + votePrice + ' ALGO');
+            this.log('💸 Actually spent: ' + votePrice + ' ALGO');
+            this.log('🔍 View TX: https://lora.algokit.io/testnet/tx/' + txId);
             
-            // Calculate expected return based on consensus simulation
-            const consensusAlignment = Math.random() > 0.2; // 80% chance of alignment
-            const expectedReturn = consensusAlignment ? votePrice * 1.25 : votePrice * 0.75;
+            // Wait for confirmation
+            this.log('⏳ Waiting for confirmation...');
+            const confirmedTxn = await algosdk.waitForConfirmation(this.algodClient, txId, 4);
             
-            this.log('📈 Expected return: ' + expectedReturn.toFixed(2) + ' ALGO ' + 
-                    (consensusAlignment ? '(+25% consensus bonus)' : '(-25% outlier penalty)'));
+            this.log('🎉 Transaction confirmed in round: ' + confirmedTxn['confirmed-round']);
+            this.log('📊 Real blockchain data now stored!');
             
-            this.showInfo('Vote submitted to TestNet! Transaction ID: ' + txId);
+            this.showInfo('REAL vote submitted to TestNet! TX: ' + txId.substring(0, 8) + '...');
             
-            // Refresh balance after a delay
-            setTimeout(() => this.refreshBalance(), 2000);
+            // Refresh balance to show actual spending
+            setTimeout(() => this.refreshBalance(), 3000);
             
         } catch (error) {
-            this.log('❌ Error submitting vote: ' + error.message);
-            this.showError('Failed to submit vote: ' + error.message);
+            this.log('❌ Error submitting REAL vote: ' + error.message);
+            this.showError('Failed to submit real vote: ' + error.message);
         }
     }
     
@@ -350,64 +376,139 @@ class UpliftTestnetIntegration {
         }
         
         try {
-            this.log('📊 Getting results for response ' + responseId + '...');
+            this.log('📊 Getting REAL results from blockchain for response ' + responseId + '...');
             
-            // Simulate getting results from contract
-            const mockResults = {
-                voteCount: Math.floor(Math.random() * 50) + 10,
-                avgEmpathy: (Math.random() * 4 + 6).toFixed(1),
-                avgWisdom: (Math.random() * 4 + 6).toFixed(1),
-                avgClarity: (Math.random() * 4 + 6).toFixed(1),
-                avgImpact: (Math.random() * 4 + 6).toFixed(1),
-                totalStaked: (Math.random() * 100 + 50).toFixed(2),
-                creatorEarnings: 0
-            };
+            // Call the contract's get_results method
+            const suggestedParams = await this.algodClient.getTransactionParams().do();
             
-            mockResults.creatorEarnings = (mockResults.totalStaked * 0.6).toFixed(2);
+            const appCallTxn = algosdk.makeApplicationCallTxnFromObject({
+                from: this.wallet ? this.wallet.address : this.testnetConfig.demoAddress,
+                appIndex: this.appId,
+                onComplete: algosdk.OnApplicationComplete.NoOpOC,
+                appArgs: [
+                    new Uint8Array(Buffer.from('get_results')),
+                    algosdk.encodeUint64(parseInt(responseId))
+                ],
+                suggestedParams: suggestedParams
+            });
             
-            const resultsHtml = `
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                    <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">${mockResults.voteCount}</div>
-                        <div>Total Votes</div>
+            // Get application state to read stored results
+            try {
+                const appInfo = await this.algodClient.getApplicationByID(this.appId).do();
+                const globalState = appInfo.params['global-state'] || [];
+                
+                this.log('🔍 Reading contract state...');
+                
+                // Parse global state for our response data
+                let voteCount = 0;
+                let empathyTotal = 0;
+                let wisdomTotal = 0; 
+                let clarityTotal = 0;
+                let impactTotal = 0;
+                
+                // Look for our stored values
+                globalState.forEach(item => {
+                    const key = Buffer.from(item.key, 'base64').toString();
+                    const value = item.value.uint || 0;
+                    
+                    if (key === `vote_count_${responseId}`) {
+                        voteCount = value;
+                    } else if (key === `empathy_total_${responseId}`) {
+                        empathyTotal = value;
+                    } else if (key === `wisdom_total_${responseId}`) {
+                        wisdomTotal = value;
+                    } else if (key === `clarity_total_${responseId}`) {
+                        clarityTotal = value;
+                    } else if (key === `impact_total_${responseId}`) {
+                        impactTotal = value;
+                    }
+                });
+                
+                // Calculate averages
+                const avgEmpathy = voteCount > 0 ? (empathyTotal / voteCount).toFixed(1) : '0.0';
+                const avgWisdom = voteCount > 0 ? (wisdomTotal / voteCount).toFixed(1) : '0.0';
+                const avgClarity = voteCount > 0 ? (clarityTotal / voteCount).toFixed(1) : '0.0';
+                const avgImpact = voteCount > 0 ? (impactTotal / voteCount).toFixed(1) : '0.0';
+                
+                const totalStaked = (voteCount * 2.5).toFixed(2); // Estimate based on votes
+                const creatorEarnings = (totalStaked * 0.6).toFixed(2);
+                
+                const resultsHtml = `
+                    <div style="background: #e8f5e8; padding: 16px; border-radius: 8px; margin-bottom: 16px; text-align: center;">
+                        <strong>📊 REAL DATA FROM BLOCKCHAIN</strong>
+                        <div style="font-size: 0.9rem; margin-top: 4px;">Live from TestNet Contract ${this.appId}</div>
                     </div>
-                    <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;">${mockResults.avgEmpathy}</div>
-                        <div>Avg Empathy</div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                        <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">${voteCount}</div>
+                            <div>Total Votes (Real)</div>
+                        </div>
+                        <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #e74c3c;">${avgEmpathy}</div>
+                            <div>Avg Empathy</div>
+                        </div>
+                        <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #3498db;">${avgWisdom}</div>
+                            <div>Avg Wisdom</div>
+                        </div>
+                        <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #f39c12;">${avgClarity}</div>
+                            <div>Avg Clarity</div>
+                        </div>
+                        <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #27ae60;">${avgImpact}</div>
+                            <div>Avg Impact</div>
+                        </div>
+                        <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #9b59b6;">${totalStaked}</div>
+                            <div>Est. Total Staked (ALGO)</div>
+                        </div>
                     </div>
-                    <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #3498db;">${mockResults.avgWisdom}</div>
-                        <div>Avg Wisdom</div>
+                    <div style="margin-top: 20px; padding: 16px; background: #d4edda; border-radius: 8px; text-align: center;">
+                        <strong>Creator Earnings: ${creatorEarnings} ALGO</strong>
+                        <div style="font-size: 0.9rem; margin-top: 8px; opacity: 0.8;">
+                            (60% of total stakes go to response creator)
+                        </div>
                     </div>
-                    <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #f39c12;">${mockResults.avgClarity}</div>
-                        <div>Avg Clarity</div>
+                    <div style="margin-top: 16px; text-align: center;">
+                        <a href="https://lora.algokit.io/testnet/application/${this.appId}" target="_blank" style="color: #667eea; text-decoration: none;">
+                            🔍 View Contract State on Explorer
+                        </a>
                     </div>
-                    <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #27ae60;">${mockResults.avgImpact}</div>
-                        <div>Avg Impact</div>
+                `;
+                
+                document.getElementById('results-content').innerHTML = resultsHtml;
+                document.getElementById('results-display').classList.remove('hidden');
+                
+                this.log('✅ REAL results retrieved from blockchain!');
+                this.log('📊 Response ' + responseId + ': ' + voteCount + ' votes stored on TestNet');
+                
+            } catch (stateError) {
+                this.log('⚠️ Could not read contract state, may be no data yet: ' + stateError.message);
+                
+                // Show message for empty state
+                const emptyHtml = `
+                    <div style="text-align: center; padding: 40px;">
+                        <div style="font-size: 1.2rem; color: #666; margin-bottom: 16px;">
+                            📭 No votes recorded yet for Response ${responseId}
+                        </div>
+                        <div style="font-size: 0.9rem; color: #888;">
+                            Submit a vote first to see real blockchain data here!
+                        </div>
+                        <div style="margin-top: 16px;">
+                            <a href="https://lora.algokit.io/testnet/application/${this.appId}" target="_blank" style="color: #667eea;">
+                                🔍 View Contract on Explorer
+                            </a>
+                        </div>
                     </div>
-                    <div style="text-align: center; background: #f8f9fa; padding: 16px; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: bold; color: #9b59b6;">${mockResults.totalStaked}</div>
-                        <div>Total Staked (ALGO)</div>
-                    </div>
-                </div>
-                <div style="margin-top: 20px; padding: 16px; background: #d4edda; border-radius: 8px; text-align: center;">
-                    <strong>Creator Earnings: ${mockResults.creatorEarnings} ALGO</strong>
-                    <div style="font-size: 0.9rem; margin-top: 8px; opacity: 0.8;">
-                        (60% of total stakes go to response creator)
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('results-content').innerHTML = resultsHtml;
-            document.getElementById('results-display').classList.remove('hidden');
-            
-            this.log('✅ Results retrieved for response ' + responseId);
-            this.log('📊 ' + mockResults.voteCount + ' votes, ' + mockResults.totalStaked + ' ALGO staked');
+                `;
+                
+                document.getElementById('results-content').innerHTML = emptyHtml;
+                document.getElementById('results-display').classList.remove('hidden');
+            }
             
         } catch (error) {
-            this.log('❌ Error getting results: ' + error.message);
+            this.log('❌ Error getting REAL results: ' + error.message);
             this.showError('Failed to get results: ' + error.message);
         }
     }
